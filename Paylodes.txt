@@ -1,0 +1,136 @@
+Paylodes
+
+---------------Add a User ie-User Registration----------- http://localhost:8088/api/user/register
+{
+    "userName": "revanth",
+    "password": "testpassword",
+    "confirmPassword" :"testpassword",
+    "userEmail": "revanth@gmail.com",
+    "phonenumber": 7998765578,
+    "userType": "A",
+    "address":{
+        "hno" : "3/6",
+        "street" : "Sompethingtest",
+        "city" : "test",
+        "state" : "test3",
+        "zipcode" : "88999"
+    }
+    }
+
+-------------------User Login------------------------- http://localhost:8088/api/user/login
+
+{
+    "password": "testpassword",
+    "userEmail": "revanth@gmail.com"
+}
+
+------------User View Profile-------------------  http://localhost:8088/api/user/viewProfile
+
+{
+    "userEmail": "revanth@gmail.com"
+}
+
+------------User Update Profile-----------------  http://localhost:8088/api/user/updateProfile
+
+{
+    "userEmail": "revanth@gmail.com",
+     "userName" : "saraathhh",
+     "phonenumber": 7998765578,
+     "address":{
+        "hno" : "3/6",
+        "street" : "Sompethingtest",
+        "city" : "test",
+        "state" : "test3",
+        "zipcode" : "88999"
+    }
+}
+------------User Password Updating--------------  http://localhost:8088/api/user/updatePassword
+{
+    "userEmail": "sharath@gmail.com",
+    "password": "testpasswordww",
+    "confirmPassword" : "testpasswordww",
+    "oldPassword" : "testpassword"
+}
+
+-------------User Delete Profile----------------  http://localhost:8088/api/user/deleteProfile
+
+{
+    "userEmail": "revanth@gmail.com",
+    "password": "testpassword"
+}
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+---------Add a Product ie-Admin/addProduct------- http://localhost:8088/api/admin/addProduct
+{
+    "userEmail" : "revanth.com",
+    "productId" : "10077",
+    "prodName" : "Dove" ,
+    "prodPrice" : "185" , 
+    "prodDesc" : "Makes your hair silkey" , 
+    "prodStock" : "45" , 
+    "prodExPDate" : "2025-05-01" , 
+    "prodManufDate" : "2023-05-01",
+    "categoryName" : "Shampoo"
+}
+------------To Update a product ie-admin/updateProduct------- http://localhost:8088/api/admin/updateProduct
+{
+    "userEmail" : "revanth.com",
+    "productId" : "1007",
+    "prodStock"  : 1
+}
+-----------To delete a product ie admin/deleteproduct------- http://localhost:8088/api/admin/addProduct
+
+{
+    "userEmail" : "revanth@gmail.com",
+    "prodName" : "Dove"
+}
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+-----------To view all products ------------------ http://localhost:8088/api/products/view
+
+
+
+-----------To view a product by its name ---------- http://localhost:8088/api/products/view/{productName}
+                                                    http://localhost:8088/api/products/view/Medimix
+                                                     
+                                                     http://localhost:8088/api/products/category/{categoryName}
+-----------To view a product by its category-------- http://localhost:8088/api/products/category/sope
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+-----------To add a product to cart --------------- http://localhost:8088/api/user/cart/addToCart
+
+{
+    "userEmail" : "revanth@gmail.com",
+    "productId" : "1008",
+    "prodStock"  : 3
+}
+
+------------To Update a Product in cart ----------- http://localhost:8088/api/user/cart/updateCart
+{
+    "userEmail" : "revanth.com",
+    "productId" : "1005",
+    "prodStock"  : 2
+}
+
+-----------To Remove a Product from cart ---------- http://localhost:8088/api/user/cart/removeProduct
+{
+    "userEmail" : "revanth.com",
+    "productId" : "1005"
+}
+
+------------View Cart  ie-api/user/cart/viewCart------- http://localhost:8088/api/user/cart/viewCart
+{
+    "userEmail" : "revanth.com"
+}
+
+------------Checkout from cart ----------------------- http://localhost:8088/api/user/cart/checkout
+
+{
+    "userEmail" : "revanth.com"
+}
+
+-------------View Orders of a user after checkout------------ http://localhost:8088/api/user/viewOrders
