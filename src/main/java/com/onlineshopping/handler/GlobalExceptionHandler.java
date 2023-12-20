@@ -42,7 +42,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
 	{
 		error.setStatus(HttpStatus.NOT_FOUND);
 		error.setTimestamp(LocalDateTime.now());
-		error.setMessage(passEx.getMessage());
+		error.setMessage("Invalid Product to add");
 		return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
 	}
 	

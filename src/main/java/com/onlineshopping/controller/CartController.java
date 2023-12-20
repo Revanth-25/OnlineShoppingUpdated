@@ -35,7 +35,7 @@ public class CartController {
 	}
 	
 	@PutMapping("/updateCart")
-	public ResponseEntity<String> removeFromCart(@RequestBody ProductDto productDto)
+	public ResponseEntity<String> updateFromCart(@RequestBody ProductDto productDto)
 	{
 		return new ResponseEntity<>(cartService.updateCart(productDto),HttpStatus.OK);
 	}

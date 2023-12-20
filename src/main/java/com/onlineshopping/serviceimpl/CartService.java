@@ -21,6 +21,7 @@ import com.onlineshopping.entity.OrderDetails;
 import com.onlineshopping.entity.Product;
 import com.onlineshopping.entity.User;
 import com.onlineshopping.exceptions.CartNotFoundException;
+import com.onlineshopping.exceptions.InvalidProductException;
 import com.onlineshopping.exceptions.OrderNotFoundException;
 import com.onlineshopping.exceptions.ProductNotFoundException;
 import com.onlineshopping.exceptions.UserNotFoundException;
@@ -44,8 +45,10 @@ public class CartService {
 	@Autowired
 	OrderRepository orderRepository;
 
-	@Transactional(readOnly = false)
 	public String addToCart(ProductDto productDto) {
+		if(productDto.getProdStock()<=0) {
+			throw new InvalidProductException("Please enter valid product number to add");
+		}
 		Optional<User> userOptional = userRepository.findByEmailIgnoreCase(productDto.getUserEmail());
 		if (userOptional.isPresent()) {
 			User user = userOptional.get();
@@ -56,16 +59,15 @@ public class CartService {
 				if (existingCart.isPresent()) {
 					Cart cart = existingCart.get();
 
-					// Check if the product is already in the cart
+					// Check if the product is already in the cartItems
 					Optional<CartItems> existingCartItem = cart.getCartItems().stream()
 							.filter(item -> item.getProduct().equals(product)).findFirst();
 
 					if (existingCartItem.isPresent()) {
-						// Update the existing cart item
+						// Update the existing cart ite
 						CartItems cartItem = existingCartItem.get();
 						cartItem.setQuantity(cartItem.getQuantity() + productDto.getProdStock());
-						cartItem.setTotal(
-								cartItem.getTotal() + (productDto.getProdStock() * product.getProductPrice()));
+						cartItem.setTotal(cartItem.getTotal() + (productDto.getProdStock() * product.getProductPrice()));
 					} else {
 						// Create a new cart item
 						CartItems cartItem = new CartItems();
@@ -119,6 +121,8 @@ public class CartService {
 				Optional<Cart> cartOptional = cartRepository.findByUser(user);
 				if (cartOptional.isPresent()) {
 					Cart cart = cartOptional.get();
+					
+					// Check if the product is in the cartItems
 					Optional<CartItems> existingCartItem = cart.getCartItems().stream()
 							.filter(item -> item.getProduct().equals(product)).findFirst();
 					if (existingCartItem.isEmpty()) {
@@ -129,6 +133,7 @@ public class CartService {
 					int quantityToRemove = productDto.getProdStock();
 
 					if (quantityToRemove <= cartItemToUpdate.getQuantity()) {
+						//update the total and quantity in cart
 						cart.setCartQuantity(cart.getCartQuantity() - quantityToRemove);
 						cart.setCartTotal(cart.getCartTotal() - (product.getProductPrice() * quantityToRemove));
 
@@ -143,7 +148,7 @@ public class CartService {
 						}
 
 						cartRepository.save(cart);
-						return "Product removed from cart";
+						return "Product updated in cart";
 					} else {
 						throw new ProductNotFoundException("Product to remove exceeds the quantity in cart item");
 					}
@@ -221,6 +226,7 @@ public class CartService {
 			Optional<Cart> cartOptional = cartRepository.findByUser(user);
 			if (cartOptional.isPresent()) {
 				Cart cart = cartOptional.get();
+				//creating the order and setting the order
 				Order order = new Order();
 				cart.setOrder(order);
 				order.setUser(user);

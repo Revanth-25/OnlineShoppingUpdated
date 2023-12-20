@@ -92,7 +92,7 @@ class TestAdminService {
 		Assertions.assertThrows(InvalidProductException.class, () -> adminService.addProducts(productDto));
 	}
 	
-	@Test
+	@Test 
 	void addProducts_AdminNotFound() {
 		ProductDto productDto = new ProductDto();
 		productDto.setUserEmail("test.com");

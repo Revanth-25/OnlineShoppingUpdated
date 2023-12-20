@@ -30,7 +30,6 @@ public class UserService{
 	@Autowired
 	UserRepository userRepository;
 
-	@Transactional(readOnly = false)
 	public String insertUser(UserDto userDto) {
 		Optional<User> optionalUser = userRepository.findByEmailIgnoreCase(userDto.getUserEmail());
 		if (optionalUser.isPresent()) {
@@ -69,7 +68,6 @@ public class UserService{
 		return "Registration Successful";
 	}
 
-	@Transactional(readOnly = true)
 	public String userLogin(UserDto userDto) {
 		Optional<User> user = userRepository.findByEmailIgnoreCase(userDto.getUserEmail());
 		if (user.isPresent()) {
@@ -81,7 +79,6 @@ public class UserService{
 		throw new UserNotFoundException();
 	}
 
-	@Transactional(readOnly = true)
 	public UserViewDto getUserProfileByEmail(String email) {
 		Optional<User> user = userRepository.findByEmailIgnoreCase(email);
 		if (user.isPresent()) {
@@ -100,7 +97,6 @@ public class UserService{
 			throw new UserNotFoundException();
 	}
 
-	@Transactional(readOnly = false)
 	public String updateUserDetails(UserDto userDto) {
 		Optional<User> userOptional = userRepository.findByEmailIgnoreCase(userDto.getUserEmail());
 		if (userOptional.isPresent()) {
@@ -128,7 +124,6 @@ public class UserService{
 		throw new UserNotFoundException();
 	}
 
-	@Transactional(readOnly = false)
 	public String updatePassword(UserDto userDto) {
 		Optional<User> userOptional = userRepository.findByEmailIgnoreCase(userDto.getUserEmail());
 		if (userOptional.isPresent()) {
@@ -147,7 +142,6 @@ public class UserService{
 		throw new UserNotFoundException();
 	}
 
-	@Transactional(readOnly = false)
 	public String deleteUser(UserDto userDto) {
 		Optional<User> userOptional = userRepository.findByEmailIgnoreCase(userDto.getUserEmail());
 		if (userOptional.isPresent()) {
@@ -160,9 +154,7 @@ public class UserService{
 		}
 		throw new UserNotFoundException();
 	}
-	
-	
-	@Transactional(readOnly = true)
+
 	public List<OrderDto> viewOrders(ProductDto productDto) {
 		Optional<User> userOptional = userRepository.findByEmailIgnoreCase(productDto.getUserEmail());
 		if (userOptional.isPresent()) {
@@ -173,19 +165,19 @@ public class UserService{
 			}
 			List<OrderDto> orderDtoList = new ArrayList<>();
 			for (Order orders : user.getOrder()) {
-				List<OrderDetailsDto> orderList = new ArrayList<>();
+				List<OrderDetailsDto> orderDetailsList = new ArrayList<>();
 				for (OrderDetails orderDetails : orders.getOrderDetails()) {
 					OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
 					orderDetailsDto.setName(orderDetails.getProduct().getProductName());
 					orderDetailsDto.setQuantity(orderDetails.getQuantity());
 					orderDetailsDto.setTotal(orderDetails.getTotal());
-					orderList.add(orderDetailsDto);
+					orderDetailsList.add(orderDetailsDto);
 				}
-				if (!orderList.isEmpty()) {
+				if (!orderDetailsList.isEmpty()) {
 					OrderDto orderDto = new OrderDto();
 					orderDto.setOrderDate(orders.getOrderDate());
 					orderDto.setOrderTotal(orders.getOrderTotal());
-					orderDto.setOrderDetails(orderList);
+					orderDto.setOrderDetails(orderDetailsList);
 					orderDtoList.add(orderDto);
 				}
 			}

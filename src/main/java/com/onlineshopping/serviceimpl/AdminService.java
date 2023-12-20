@@ -36,41 +36,38 @@ public class AdminService {
 	@Autowired
 	CartRepository cartRepository;
 
-	@Transactional(readOnly = false)
-	public String addProducts(ProductDto productDto) {
 
+	public String addProducts(ProductDto productDto)
+	{
 		Optional<User> userOptional = userRepository.findByEmailIgnoreCase(productDto.getUserEmail());
-		if (userOptional.isPresent()) {
+		if (userOptional.isPresent())
+		{
 			User user = userOptional.get();
-			if (user.getUserType() == 'A') {
+			if (user.getUserType() == 'A')
+			{
 
 				if (productDto.getProductId() != 0 && productDto.getProdName() != null && productDto.getProdPrice() != 0
 						&& productDto.getProdStock() != 0 && productDto.getProdDesc() != null
-						&& productDto.getProdManufDate() != null && productDto.getCategoryName() != null) {
+						&& productDto.getProdManufDate() != null && productDto.getCategoryName() != null)
+				{
+					Product product = new Product();
+					product.setProductId(productDto.getProductId());
+					product.setProductName(productDto.getProdName());
+					product.setProductPrice(productDto.getProdPrice());
+					product.setProductStock(productDto.getProdStock());
+					product.setProductDescription(productDto.getProdDesc());
+					product.setProductManufactureDate(productDto.getProdManufDate());
+					product.setProductExpiryDate(productDto.getProdExPDate());
 					Optional<Category> categoryOptional = categoryRepository
 							.findByCategoryNameIgnoreCase(productDto.getCategoryName());
-					if (categoryOptional.isPresent()) {
+					if (categoryOptional.isPresent())
+					{
 						Category category = categoryOptional.get();
-						productDto.setCategoryName(category.getCategoryName());
-						Product product = new Product();
-						product.setProductId(productDto.getProductId());
-						product.setProductName(productDto.getProdName());
-						product.setProductPrice(productDto.getProdPrice());
-						product.setProductStock(productDto.getProdStock());
-						product.setProductDescription(productDto.getProdDesc());
-						product.setProductManufactureDate(productDto.getProdManufDate());
-						product.setProductExpiryDate(productDto.getProdExPDate());
 						product.setCategory(category);
 						productRepository.save(product);
-					} else {
-						Product product = new Product();
-						product.setProductId(productDto.getProductId());
-						product.setProductName(productDto.getProdName());
-						product.setProductPrice(productDto.getProdPrice());
-						product.setProductStock(productDto.getProdStock());
-						product.setProductDescription(productDto.getProdDesc());
-						product.setProductManufactureDate(productDto.getProdManufDate());
-						product.setProductExpiryDate(productDto.getProdExPDate());
+					}
+					else
+					{
 						Category category = new Category();
 						category.setCategoryName(productDto.getCategoryName());
 						product.setCategory(category);
@@ -84,15 +81,18 @@ public class AdminService {
 		throw new AdminNotFoundException();
 	}
 
-	@Transactional(readOnly = false)
-	public String updateProduct(ProductDto productDto) {
+	public String updateProduct(ProductDto productDto)
+	{
 		Optional<User> userOptional = userRepository.findByEmailIgnoreCase(productDto.getUserEmail());
-		if (userOptional.isPresent()) {
+		if (userOptional.isPresent())
+		{
 			User user = userOptional.get();
-			if (user.getUserType() == 'A') {
+			if (user.getUserType() == 'A')
+			{
 				Optional<Product> prodOptional = productRepository
 						.findByProductNameIgnoreCase(productDto.getProdName());
-				if (prodOptional.isPresent()) {
+				if (prodOptional.isPresent())
+				{
 					Product dbProduct = prodOptional.get();
 
 					if (productDto.getProdDesc() != null) {
@@ -110,14 +110,17 @@ public class AdminService {
 					if (productDto.getProdManufDate() != null) {
 						dbProduct.setProductManufactureDate(productDto.getProdManufDate());
 					}
-					if (productDto.getCategoryName() != null) {
+					if (productDto.getCategoryName() != null){
 						Optional<Category> opCategory = categoryRepository
 								.findByCategoryNameIgnoreCase(productDto.getCategoryName());
 
-						if (opCategory.isEmpty()) {
+						if (opCategory.isEmpty())
+						{
 							throw new CategoryNotFoundException(
 									"NO CATEGORY FOUND WITH NAME :" + productDto.getCategoryName());					
-						} else {
+						}
+						else
+						{
 							dbProduct.setCategory(opCategory.get());
 						}
 					}
@@ -131,29 +134,18 @@ public class AdminService {
 		throw new AdminNotFoundException();
 	}
 
-	@Transactional(readOnly = false)
 	public String deleteProduct(ProductDto productDto) {
 		Optional<User> userOptional = userRepository.findByEmailIgnoreCase(productDto.getUserEmail());
-		if (userOptional.isPresent()) {
+		if (userOptional.isPresent())
+		{
 			User user = userOptional.get();
-			if (user.getUserType() == 'A') {
+			if (user.getUserType() == 'A')
+			{
 				Optional<Product> prodOptional = productRepository
 						.findByProductNameIgnoreCase(productDto.getProdName());
-				if (prodOptional.isPresent()) {
-					Product prod = prodOptional.get();
-					
-					Optional<CartItems> existingCartItem = user.getCart().getCartItems().stream()
-							.filter(item -> item.getProduct().equals(prod)).findFirst();
-
-					if(existingCartItem.isPresent()) {
-						CartItems cart = existingCartItem.get();
-						Cart carts = user.getCart();
-						carts.setCartQuantity(carts.getCartQuantity()-cart.getQuantity());
-						carts.setCartTotal(carts.getCartTotal()-cart.getTotal());
-						carts.getCartItems().remove(cart);
-						cartRepository.save(carts);
-					}
-			        
+				if (prodOptional.isPresent())
+				{
+					Product prod = prodOptional.get();        
 					productRepository.delete(prod);
 					return "Product Deleted Sucessfully";
 				}

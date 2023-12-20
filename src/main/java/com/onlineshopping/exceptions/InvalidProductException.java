@@ -2,6 +2,10 @@ package com.onlineshopping.exceptions;
 
 public class InvalidProductException extends RuntimeException{
 	private String message;
+	
+	public InvalidProductException() {
+		
+	}
 
 	public InvalidProductException(String message) {
 		super();

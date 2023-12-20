@@ -25,7 +25,6 @@ public class ProductService {
 	@Autowired
 	CategoryRepository categoryRepository;
 
-	@Transactional(readOnly = true)
 	public List<ProductViewDto> viewProducts() {
 		List<Product> products = productRepository.findAll();
 
@@ -48,7 +47,6 @@ public class ProductService {
 
 	}
 
-	@Transactional(readOnly = true)
 	public List<ProductViewDto> viewByCategory(String categoryName) {
 		Optional<Category> categoryOptional = categoryRepository.findByCategoryNameIgnoreCase(categoryName);
 		if (categoryOptional.isPresent()) {
@@ -76,7 +74,6 @@ public class ProductService {
 		throw new CategoryNotFoundException("Category Not Available");
 	}
 
-	@Transactional(readOnly = true)
 	public ProductViewDto viewProductByName(String productName) {
 		Optional<Product> prodOptional = productRepository.findByProductNameIgnoreCase(productName);
 		if (prodOptional.isPresent()) {
